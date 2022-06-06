@@ -1,16 +1,22 @@
 import pymongo
+from dotenv import load_dotenv
+import os
+
+
 class Database(object):
-    URI="mongodb://127.0.0.1:27017"
-    DATABASE=None
+    load_dotenv()
+    URI = os.getenv("MONGO_URI")
+    DATABASE = None
 
     @staticmethod
     def initialize():
-        client=pymongo.MongoClient(Database.URI)
-        Database.DATABASE=client['holistic_wellness']
+        client = pymongo.MongoClient(Database.URI)
+        Database.DATABASE = client["holistic_wellness"]
+        print(client.list_database_names())
 
     @staticmethod
-    def insert(collection,data):
-        return Database.DATABASE[collection].insert(data)
+    def insert(collection, data):
+        return Database.DATABASE[collection].insert_one(data)
 
     @staticmethod
     def find(collection, query):
@@ -21,5 +27,5 @@ class Database(object):
         return Database.DATABASE[collection].find_one(query)
 
     @staticmethod
-    def update(collection,query,value):
-        return Database.DATABASE[collection].update_one(query,value)
+    def update(collection, query, value):
+        return Database.DATABASE[collection].update_one(query, value)
